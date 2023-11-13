@@ -46,41 +46,41 @@ void divideElementAtIndex(double array[], int size, int index) { // 777
     }
 }
 
-void Operation(double array[], int* temp[], void (*funcPtrs[6]) (double* array, int, int), int num, int array_size) {
+void Operation(double array[], int operations[], int params[], bool print_codes[], void (*funcPtrs[6]) (double* array, int, int), int num, int array_size) {
     for (int i = 0; i < num; i++) {
         cout << "operation #" << i + 1 << "... ";
-        switch (temp[i][0]) {
+        switch (operations[i]) {
             case 5:
-                funcPtrs[0](array, array_size, temp[i][1]);
+                multiplyArray(array, array_size, params[i]);
                 cout << "completed" << endl;
                 break;
             case 8:
-                funcPtrs[1](array, array_size, temp[i][1]);
+                addValueToAll(array, array_size, params[i]);
                 cout << "completed" << endl;
                 break;
             case 20:
-                funcPtrs[2](array, array_size, temp[i][1]);
+                powerArray(array, array_size, params[i]);
                 cout << "completed" << endl;
                 break;
             case 47:
-                funcPtrs[3](array, array_size, temp[i][1]);
+                OneToMultiples(array, array_size, params[i]);
                 cout << "completed" << endl;
                 break;
             case 500:
-                funcPtrs[4](array, array_size, temp[i][1]);
+                changeSignFromIndex(array, array_size, params[i]);
                 cout << "completed" << endl;
                 break;
             case 777:
-                funcPtrs[5](array, array_size, temp[i][1]);
+                divideElementAtIndex(array, array_size, params[i]);
                 cout << "completed" << endl;
                 break;
             default:
                 cout << "skipped" << endl;
-                temp[i][2] = 0;
+                print_codes[i] = 0;
         }
 
-        if (temp[i][2] == 1)   {
-            cout << "Temp data: " << endl;
+        if (print_codes[i] == 1)   {
+            cout << "params data: " << endl;
             for (int i = 0; i < array_size; i++) {
                 cout << i + 1 << ") ";
                 cout << fixed << setprecision(3) << array[i] << endl;
@@ -92,16 +92,10 @@ void Operation(double array[], int* temp[], void (*funcPtrs[6]) (double* array, 
 
 void main(){
     int array_size, num_of_operations;
-    const int values = 3;
+    char print;
 
-    void (*funcPtrs[6]) (double* array, int, int);
-    funcPtrs[0] = multiplyArray;
-    funcPtrs[1] = addValueToAll;
-    funcPtrs[2] = powerArray;
-    funcPtrs[3] = OneToMultiples;
-    funcPtrs[4] = changeSignFromIndex;
-    funcPtrs[5] = divideElementAtIndex;
-
+    void (*funcPtrs[6]) (double* array, int, int) = { multiplyArray, addValueToAll, powerArray, OneToMultiples, changeSignFromIndex, divideElementAtIndex };
+    
     cout << "Enter array size: ";
     cin >> array_size;
 
@@ -115,26 +109,23 @@ void main(){
     cout << "Enter number of operations: ";
     cin >> num_of_operations;
 
-    int** operations = new int* [num_of_operations]; // создаём массив, который сохраняет введённые значения для каждой операции
+    int* operations = new int[num_of_operations];
+    int* params = new int[num_of_operations];
+    bool* print_codes = new bool[num_of_operations];
 
     for (int i = 0; i < num_of_operations; ++i) {
-        operations[i] = new int[values];
-    }
-
-    for (int i = 0; i < num_of_operations; ++i) {
-        char print;
         cout << "(code \\ param \\ print ? ) " << i + 1 << ") ";
-        cin >> operations[i][0]; // Операция
-        cin >> operations[i][1]; // параметр
+        cin >> operations[i];
+        cin >> params[i];
         cin >> print;
         if (print == '+')
-            operations[i][2] = 1; // печатаем
-        else
-            operations[i][2] = 0; // не печатаем
-     }
+            print_codes[i] = true;
+        else 
+            print_codes[i] = false;
+    }
 
     cout << "Processing..." << endl;
-    Operation(array, operations, funcPtrs, num_of_operations, array_size);
+    Operation(array, operations, params, print_codes, funcPtrs, num_of_operations, array_size);
 
     cout << "-Result-" << endl;
     for (int i = 0; i < array_size; i++) {
@@ -142,4 +133,8 @@ void main(){
         cout << fixed << setprecision(3) << array[i] << endl;
     }
 
+    delete[] array;
+    delete[] operations;
+    delete[] params;
+    delete[] print_codes;
 }
