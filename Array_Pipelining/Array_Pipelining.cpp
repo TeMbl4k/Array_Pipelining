@@ -28,9 +28,7 @@ void powerArray(double array[], int size, int exponent) { // 20
 
 void OneToMultiples(double array[], int size, int divisor) { // 47
     for (int i = 0; i < size; ++i) {
-        if (i % divisor == 0) {
-            array[i] = 1;
-        }
+        array[i] *= 1 - static_cast<double>(i % divisor == 0);
     }
 }
 
@@ -45,6 +43,13 @@ void divideElementAtIndex(double array[], int size, int index) { // 777
         array[index] /= 2;
     }
 }
+
+void printArray(double array[], int size) {
+    for (int i = 0; i < size; i++) {
+        cout << i + 1 << ") " << fixed << setprecision(3) << array[i] << endl;
+    }
+}
+
 
 void Operation(double array[], int operations[], int params[], bool print_codes[], void (*funcPtrs[6]) (double* array, int, int), int num, int array_size) {
     for (int i = 0; i < num; i++) {
@@ -80,10 +85,8 @@ void Operation(double array[], int operations[], int params[], bool print_codes[
         }
 
         if (print_codes[i] == 1)   {
-            cout << "params data: " << endl;
-            for (int i = 0; i < array_size; i++) {
-                cout << i + 1 << ") ";
-                cout << fixed << setprecision(3) << array[i] << endl;
+            cout << "Temp data: " << endl;
+            printArray(array, array_size);
             }
         }
     }
@@ -118,20 +121,14 @@ void main(){
         cin >> operations[i];
         cin >> params[i];
         cin >> print;
-        if (print == '+')
-            print_codes[i] = true;
-        else 
-            print_codes[i] = false;
+        print_codes[i] = (print == '+');
     }
 
     cout << "Processing..." << endl;
     Operation(array, operations, params, print_codes, funcPtrs, num_of_operations, array_size);
 
     cout << "-Result-" << endl;
-    for (int i = 0; i < array_size; i++) {
-        cout << i + 1 << ") ";
-        cout << fixed << setprecision(3) << array[i] << endl;
-    }
+    printArray(array, array_size);
 
     delete[] array;
     delete[] operations;
