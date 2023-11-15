@@ -27,9 +27,8 @@ void powerArray(double array[], int size, int exponent) { // 20
 }
 
 void OneToMultiples(double array[], int size, int divisor) { // 47
-    for (int i = 0; i < size; ++i) {
-        array[i] *= 1 - static_cast<double>(i % divisor == 0);
-    }
+    for (int i = 0; i < size; i += size)
+        array[i] = 1;
 }
 
 void changeSignFromIndex(double array[], int size, int index) { // 500
@@ -50,59 +49,57 @@ void printArray(double array[], int size) {
     }
 }
 
-
 void Operation(double array[], int operations[], int params[], bool print_codes[], void (*funcPtrs[6]) (double* array, int, int), int num, int array_size) {
     for (int i = 0; i < num; i++) {
         cout << "operation #" << i + 1 << "... ";
         switch (operations[i]) {
-            case 5:
-                multiplyArray(array, array_size, params[i]);
-                cout << "completed" << endl;
-                break;
-            case 8:
-                addValueToAll(array, array_size, params[i]);
-                cout << "completed" << endl;
-                break;
-            case 20:
-                powerArray(array, array_size, params[i]);
-                cout << "completed" << endl;
-                break;
-            case 47:
-                OneToMultiples(array, array_size, params[i]);
-                cout << "completed" << endl;
-                break;
-            case 500:
-                changeSignFromIndex(array, array_size, params[i]);
-                cout << "completed" << endl;
-                break;
-            case 777:
-                divideElementAtIndex(array, array_size, params[i]);
-                cout << "completed" << endl;
-                break;
-            default:
-                cout << "skipped" << endl;
-                print_codes[i] = 0;
+        case 5:
+            multiplyArray(array, array_size, params[i]);
+            cout << "completed" << endl;
+            break;
+        case 8:
+            addValueToAll(array, array_size, params[i]);
+            cout << "completed" << endl;
+            break;
+        case 20:
+            powerArray(array, array_size, params[i]);
+            cout << "completed" << endl;
+            break;
+        case 47:
+            OneToMultiples(array, array_size, params[i]);
+            cout << "completed" << endl;
+            break;
+        case 500:
+            changeSignFromIndex(array, array_size, params[i]);
+            cout << "completed" << endl;
+            break;
+        case 777:
+            divideElementAtIndex(array, array_size, params[i]);
+            cout << "completed" << endl;
+            break;
+        default:
+            cout << "skipped" << endl;
+            continue;
         }
 
-        if (print_codes[i] == 1)   {
-            cout << "Temp data: " << endl;
+        if (print_codes[i]) {
+            cout << "Temp data:" << endl;
             printArray(array, array_size);
-            }
         }
     }
 }
 
 
-void main(){
+void main() {
     int array_size, num_of_operations;
     char print;
 
     void (*funcPtrs[6]) (double* array, int, int) = { multiplyArray, addValueToAll, powerArray, OneToMultiples, changeSignFromIndex, divideElementAtIndex };
-    
+
     cout << "Enter array size: ";
     cin >> array_size;
 
-    double* array = new double[array_size]; // создаём массив чисел
+    double* array = new double[array_size]; 
 
     for (int i = 0; i < array_size; i++) {
         cout << i + 1 << ") ";
