@@ -1,4 +1,4 @@
-﻿#include <iostream>
+﻿﻿#include <iostream>
 #include <cmath>
 #include <iomanip>
 
@@ -12,7 +12,7 @@ void multiplyArray(double array[], int size, int multiplier) {
 
 void addValueToAll(double array[], int size, int index) {
     if ((index >= 0) && (index < size)) {
-        int valueToAdd = array[index];
+        double valueToAdd = array[index];  
 
         for (int i = 0; i < size; ++i) {
             array[i] += valueToAdd;
@@ -126,6 +126,5 @@ int main() {
     delete[] array;
     delete[] params;
     delete[] print_codes;
-
-    return 0;
+    delete[] selectedfuncPtrs;
 }
